@@ -1,0 +1,48 @@
+{
+  "newPet": {
+    "id": 0,
+    "category": {
+      "id": 1,
+      "name": "Dogs"
+    },
+    "name": "Buddy",
+    "photoUrls": [
+      "https://example.com/photo.jpg"
+    ],
+    "tags": [
+      {
+        "id": 1,
+        "name": "friendly"
+      }
+    ],
+    "status": "available"
+  },
+  "updatedPet": {
+    "name": "Buddy-Updated",
+    "status": "sold"
+  },
+  "invalidPet": {
+    "name": ""
+  },
+  "expectedShape": {
+    "id": "number",
+    "category": {
+      "id": "number",
+      "name": "string"
+    },
+    "name": "string",
+    "photoUrls": "array",
+    "tags": "array",
+    "status": "string"
+  },
+  "expectedShapeArrayItem": {
+    "id": "number",
+    "name": "string",
+    "status": "string"
+  },
+  "apiErrorShape": {
+    "code": "number",
+    "type": "string",
+    "message": "string"
+  }
+}

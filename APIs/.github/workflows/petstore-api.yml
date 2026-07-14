@@ -1,0 +1,66 @@
+name: PetStore API Tests
+
+on:
+  push:
+    branches: [main, master, develop]
+    paths:
+      - 'APIs/**'
+  pull_request:
+    branches: [main, master]
+    paths:
+      - 'APIs/**'
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: APIs
+
+    strategy:
+      matrix:
+        browser: [chrome, electron]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: APIs/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Cypress tests
+        run: npx cypress run --browser ${{ matrix.browser }}
+        continue-on-error: false
+
+      - name: Upload Mochawesome report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mochawesome-report-${{ matrix.browser }}
+          path: APIs/reports/
+          retention-days: 7
+
+      - name: Upload screenshots on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots-${{ matrix.browser }}
+          path: APIs/screenshots/
+          retention-days: 7
+
+      - name: Upload videos
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: videos-${{ matrix.browser }}
+          path: APIs/videos/
+          retention-days: 3
